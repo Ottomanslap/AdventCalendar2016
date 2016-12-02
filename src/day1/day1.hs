@@ -31,3 +31,8 @@ execute :: (Int,Int) -> Direction -> [(Char,Int)] -> (Int,Int)
 execute (x,y) _ []     = (x,y)
 execute (x,y) d ((t,s):cs) = execute (walk (x,y) (turn d t) s) (turn d t) cs 
 
+findFirstDouble :: (Int,Int) -> Direction -> [(Char,Int)] -> [(Int,Int)] -> (Int,Int)
+findFirstDouble _ _ [] _ = (0,0)
+findFirstDouble (x,y) d ((t,0):cs) ls = findFirstDouble (x,y) (turn d (fst (head cs))) (cs) ls
+findFirstDouble (x,y) d ((t,s):cs) ls | (x,y) `elem` ls = (x,y)
+                                      | otherwise       = findFirstDouble (walk (x,y) d 1) d ((t,(s-1)):cs) ((x,y):ls)
